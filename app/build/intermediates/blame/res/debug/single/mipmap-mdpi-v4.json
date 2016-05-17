@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "E:\\WorkSpace\\AndroidStudioProjects\\NewContacts\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi-v4\\ic_launcher.png",
+        "source": "E:\\WorkSpace\\AndroidStudioProjects\\NewContacts\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "E:\\WorkSpace\\AndroidStudioProjects\\NewContacts\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi-v4\\ic_photo_camera_white_24dp.png",
+        "source": "E:\\WorkSpace\\AndroidStudioProjects\\NewContacts\\app\\src\\main\\res\\mipmap-mdpi\\ic_photo_camera_white_24dp.png"
+    }
+]

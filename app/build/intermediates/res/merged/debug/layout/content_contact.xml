@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="#efefef"
+              android:orientation="vertical"
+              android:padding="16dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/contact_bg_layer"
+        android:padding="16dp">
+
+
+        <RelativeLayout
+            android:id="@+id/rl_phone"
+            android:background="@drawable/ripple_bg_rectangle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true">
+
+            <ImageView
+                android:id="@+id/iv_phone"
+                android:layout_centerVertical="true"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:alpha="0.7"
+                android:src="@mipmap/ic_phone_24dp"/>
+
+            <TextView
+                android:id="@+id/phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/iv_phone"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@id/iv_phone"
+                android:text="手机"/>
+
+            <TextView
+                android:id="@+id/tv_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/phone"
+                android:text="13682331266"
+                android:textColor="#000"/>
+
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_sendMsg"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:alpha="0.7"
+            android:layout_marginBottom="2dp"
+            android:layout_marginRight="1dp"
+            android:background="@drawable/ripple_bg"
+            android:clickable="true"
+            android:scaleType="center"
+            android:src="@mipmap/ic_message_24dp"/>
+
+
+        <RelativeLayout
+            android:id="@+id/rl_email"
+            android:layout_width="match_parent"
+            android:background="@drawable/ripple_bg_rectangle"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rl_phone"
+            android:layout_marginTop="24dp"
+            android:clickable="true">
+
+            <ImageView
+                android:id="@+id/iv_email"
+                android:layout_width="24dp"
+                android:layout_centerVertical="true"
+                android:layout_height="24dp"
+                android:alpha="0.7"
+                android:src="@mipmap/ic_email_24dp"/>
+
+            <TextView
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/iv_email"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@id/iv_email"
+                android:text="个人"/>
+
+            <TextView
+                android:id="@+id/tv_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/email"
+                android:layout_alignStart="@+id/email"
+                android:layout_alignTop="@+id/iv_email"
+                android:text="375514627@qq.com"
+                android:textColor="#000"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_place"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ripple_bg_rectangle"
+            android:layout_below="@id/rl_email"
+            android:layout_marginTop="24dp"
+            android:clickable="true">
+
+            <ImageView
+                android:id="@+id/iv_place"
+                android:layout_width="24dp"
+                android:layout_centerVertical="true"
+                android:layout_height="24dp"
+                android:alpha="0.7"
+                android:src="@mipmap/ic_place_24dp"/>
+
+            <TextView
+                android:id="@+id/place"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/iv_place"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@id/iv_place"
+                android:text="住宅"/>
+
+            <TextView
+                android:id="@+id/tv_place"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/place"
+                android:layout_alignStart="@+id/place"
+                android:layout_alignTop="@+id/iv_place"
+                android:text="深圳市XX区XX"
+                android:textColor="#000"/>
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_directions"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@id/rl_place"
+            android:layout_marginTop="6dp"
+            android:alpha="0.7"
+            android:background="@drawable/ripple_bg"
+            android:clickable="true"
+            android:scaleType="center"
+            android:src="@mipmap/ic_directions_24dp"/>
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_weight="0.8"
+        android:background="@drawable/contact_last_bg_layer"
+        android:orientation="vertical"
+        android:weightSum="5">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:paddingLeft="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:text="简介 16"/>
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#ccc"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:id="@+id/rl_business"
+            android:layout_height="70dp"
+            android:paddingLeft="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_business"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:text="单位"
+                android:textColor="@color/contactType"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="1234"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

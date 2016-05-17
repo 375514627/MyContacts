@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "E:\\WorkSpace\\AndroidStudioProjects\\NewContacts\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_contact.xml",
+        "source": "E:\\WorkSpace\\AndroidStudioProjects\\NewContacts\\app\\src\\main\\res\\menu\\menu_contact.xml"
+    },
+    {
+        "merged": "E:\\WorkSpace\\AndroidStudioProjects\\NewContacts\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_main.xml",
+        "source": "E:\\WorkSpace\\AndroidStudioProjects\\NewContacts\\app\\src\\main\\res\\menu\\menu_main.xml"
+    }
+]

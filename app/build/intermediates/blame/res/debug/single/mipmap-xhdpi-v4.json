@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "E:\\WorkSpace\\AndroidStudioProjects\\NewContacts\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi-v4\\ic_launcher.png",
+        "source": "E:\\WorkSpace\\AndroidStudioProjects\\NewContacts\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "E:\\WorkSpace\\AndroidStudioProjects\\NewContacts\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi-v4\\ic_arrow_back_24dp.png",
+        "source": "E:\\WorkSpace\\AndroidStudioProjects\\NewContacts\\app\\src\\main\\res\\mipmap-xhdpi\\ic_arrow_back_24dp.png"
+    },
+    {
+        "merged": "E:\\WorkSpace\\AndroidStudioProjects\\NewContacts\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi-v4\\person_white_540dp.png",
+        "source": "E:\\WorkSpace\\AndroidStudioProjects\\NewContacts\\app\\src\\main\\res\\mipmap-xhdpi\\person_white_540dp.png"
+    }
+]

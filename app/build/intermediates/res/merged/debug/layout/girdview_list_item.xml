@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="180dp"
+    android:orientation="vertical">
+
+    <com.example.a8.newcontacts.view.CircleImageView
+        android:id="@+id/iv_favrhead"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="15dp"
+        android:src="@mipmap/ic_person_white_120dp"/>
+
+    <TextView
+        android:id="@+id/tv_favrname"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:text="A"
+        android:textSize="15sp"/>
+
+</FrameLayout>
