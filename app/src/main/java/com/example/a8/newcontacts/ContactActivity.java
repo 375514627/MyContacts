@@ -22,12 +22,12 @@ import android.widget.Toast;
 import com.example.a8.newcontacts.bean.MyContacts;
 import com.example.a8.newcontacts.fragment.FavrContacts_Fragment;
 import com.example.a8.newcontacts.fragment.ShowContacts_Fragment;
-import com.example.a8.newcontacts.utils.DBhelper;
+import com.example.a8.newcontacts.utils.DBHelper;
 
-public class ContactActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, View.OnClickListener, View.OnLongClickListener {
+public class ContactActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener {
 
     private CollapsingToolbarLayout collapsing_toolbar_layout;
-    private DBhelper dBhelper;
+    private DBHelper DBHelper;
     private TextView tv_phone;
     private TextView tv_email;
     private TextView tv_place;
@@ -35,7 +35,7 @@ public class ContactActivity extends AppCompatActivity implements Toolbar.OnMenu
     private String name;
     private int id;
     private String email;
-    private String adress;
+    private String address;
     private Bitmap bitmap;
     private String phoneNum;
     private String business;
@@ -50,6 +50,17 @@ public class ContactActivity extends AppCompatActivity implements Toolbar.OnMenu
         contact = (MyContacts) intent.getSerializableExtra("contact");
         setContentView(R.layout.activity_contact);
 
+        initToolbar();
+
+
+        DBHelper = new DBHelper(this);
+
+        initViews();
+        setView();
+
+    }
+
+    private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 
@@ -62,15 +73,39 @@ public class ContactActivity extends AppCompatActivity implements Toolbar.OnMenu
         collapsing_toolbar_layout.setCollapsedTitleTextColor(Color.WHITE);
         collapsing_toolbar_layout.setExpandedTitleColor(Color.WHITE);
         setSupportActionBar(toolbar);
-        toolbar.setOnMenuItemClickListener(this);
-        dBhelper = new DBhelper(this);
 
-        initView();
-        setView();
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case android.R.id.home:
+                        finish();
+                        break;
+                    case R.id.menu_create:
+                        change();
+                        break;
+                    case R.id.menu_delete:
+                        delete();
+                        break;
+                    case R.id.menu_starred:
+                        starred(item);
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
-    private void initView() {
+    private void initViews() {
 
         iv_directions = findViewById(R.id.iv_directions);
         iv_sendMsg = findViewById(R.id.iv_sendMsg);
@@ -85,6 +120,12 @@ public class ContactActivity extends AppCompatActivity implements Toolbar.OnMenu
         views = new View[]{findViewById(R.id.rl_business), findViewById(R.id.rl_email)
                 , findViewById(R.id.rl_place), findViewById(R.id.rl_phone), findViewById(R.id.iv_sendMsg)};
 
+        setListener();
+
+
+    }
+
+    private void setListener() {
         for (View v : views) {
             v.setOnClickListener(this);
         }
@@ -103,13 +144,13 @@ public class ContactActivity extends AppCompatActivity implements Toolbar.OnMenu
         name = contact.getName();
         id = contact.getID();
         email = contact.getEmail();
-        adress = contact.getAddress();
+        address = contact.getAddress();
         bitmap = contact.getBitmap();
         business = contact.getBusiness();
         phoneNum = contact.getPhoneNum();
 
         getSupportActionBar().setTitle(name + "");
-        String[] strs = new String[]{business, email, adress, phoneNum};
+        String[] strs = new String[]{business, email, address, phoneNum};
 
         for (int i = 0; i < strs.length; i++) {
             if (!TextUtils.isEmpty(strs[i])) {
@@ -119,7 +160,7 @@ public class ContactActivity extends AppCompatActivity implements Toolbar.OnMenu
             }
         }
 
-        if (TextUtils.isEmpty(adress)) {
+        if (TextUtils.isEmpty(address)) {
             iv_directions.setVisibility(View.GONE);
         }
 
@@ -139,21 +180,6 @@ public class ContactActivity extends AppCompatActivity implements Toolbar.OnMenu
         return true;
     }
 
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_create:
-                change();
-                break;
-            case R.id.menu_delete:
-                delete();
-                break;
-            case R.id.menu_starred:
-                starred(item);
-                break;
-        }
-        return true;
-    }
 
     private void change() {
         Intent intent = new Intent(this, AddContactActivity.class);
@@ -171,10 +197,8 @@ public class ContactActivity extends AppCompatActivity implements Toolbar.OnMenu
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dBhelper.delete(id);
-                        Intent intent = new Intent();
-                        intent.putExtra("delete", id);
-                        setResult(DELETE_RESULT, intent);
+                        DBHelper.delete(id);
+                        ShowContacts_Fragment.getContactAdapter().remove(id);
                         finish();
                     }
                 })
@@ -183,14 +207,14 @@ public class ContactActivity extends AppCompatActivity implements Toolbar.OnMenu
 
     private void starred(MenuItem item) {
         boolean b = !item.isChecked();
-        System.out.println("-----"+b);
+        System.out.println("-----" + b);
         item.setChecked(b);
         if (b) {
             item.setIcon(R.mipmap.ic_star_24dp);
         } else {
             item.setIcon(R.mipmap.ic_star_outline_24dp);
         }
-        dBhelper.starred(id, b);
+        DBHelper.starred(id, b);
         FavrContacts_Fragment.refreshAdapter();
         ShowContacts_Fragment.refreshAdapter();
     }

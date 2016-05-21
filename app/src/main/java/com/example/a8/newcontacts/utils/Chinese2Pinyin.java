@@ -9,16 +9,21 @@ public class Chinese2Pinyin {
     private static byte[] bytes;
 
     public static String getPingYing(String input) {
-        int heightbyte = 0;
-        int lowbyte = 0;
-        int china_int = 0;
+        int heightByte;
+        int lowByte;
+        int china_int;
         String PYSX = "";
+        char first = input.charAt(0);
+        if ((first >= 'a' && first <= 'z') || (first >= 'A' && first <= 'Z')) {
+            return (first + "").toUpperCase();
+        }
+
         for (int i = 0; i < input.length(); i++) {
             bytes = input.substring(i, i + 1).getBytes();
             if (bytes.length == 2) {
-                heightbyte = ((short) (bytes[0] & (byte) 127)) + (short) 128;
-                lowbyte = ((short) (bytes[1] & (byte) 127)) + (short) 128;
-                china_int = heightbyte * 256 + lowbyte;
+                heightByte = ((short) (bytes[0] & (byte) 127)) + (short) 128;
+                lowByte = ((short) (bytes[1] & (byte) 127)) + (short) 128;
+                china_int = heightByte * 256 + lowByte;
                 //System.out.println("china_int="+china_int);
                 if (china_int >= 45217 && china_int <= 45252) {
                     PYSX += "a";

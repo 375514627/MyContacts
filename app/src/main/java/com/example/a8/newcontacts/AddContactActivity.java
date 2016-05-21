@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.example.a8.newcontacts.bean.MyContacts;
 import com.example.a8.newcontacts.fragment.ShowContacts_Fragment;
-import com.example.a8.newcontacts.utils.DBhelper;
+import com.example.a8.newcontacts.utils.DBHelper;
 import com.example.a8.newcontacts.utils.ImageLoad;
 
 public class AddContactActivity extends AppCompatActivity implements View.OnClickListener {
@@ -88,16 +88,17 @@ public class AddContactActivity extends AppCompatActivity implements View.OnClic
                 finish();
                 break;
             case R.id.add_done:
-                DBhelper dBhelper = new DBhelper(this);
+                DBHelper DBHelper = new DBHelper(this);
                 String name = et_name.getText().toString();
                 String business = et_business.getText().toString();
                 String email = et_email.getText().toString();
                 String phone = et_phone.getText().toString();
                 String place = et_place.getText().toString();
                 MyContacts contacts = new MyContacts(0, name, email, phone, b, null, place, business, 0);
-                long insert = dBhelper.insert(contacts);
-                Toast.makeText(AddContactActivity.this, insert > 0 ? "增加成功" : "增加失败", Toast.LENGTH_SHORT).show();
-                if (insert > 0) {
+                int id = DBHelper.insertID(contacts);
+                contacts.setID(id);
+                Toast.makeText(AddContactActivity.this, id > 0 ? "增加成功" : "增加失败", Toast.LENGTH_SHORT).show();
+                if (id > 0) {
                     ShowContacts_Fragment.getContactAdapter().add(contacts);
                     finish();
                 }
@@ -110,7 +111,6 @@ public class AddContactActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_change) {
-
 
             new android.app.AlertDialog.Builder(this)
                     .setTitle("更改头像")

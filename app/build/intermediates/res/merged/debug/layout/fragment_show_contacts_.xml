@@ -24,25 +24,24 @@
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:divider="@null"
             android:scrollbars="none">
 
         </ListView>
-
 
     </in.srain.cube.views.ptr.PtrClassicFrameLayout>
 
     <TextView
         android:id="@+id/float_letter"
+        android:alpha="0"
         android:layout_width="80dp"
         android:layout_height="80dp"
+        android:text="666"
+        android:textColor="#fff"
+        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="180dp"
-        android:alpha="0.6"
         android:background="@drawable/float_letter_background"
         android:gravity="center"
-        android:textSize="40sp"
-        android:visibility="gone"/>
+        android:textSize="40sp"/>
 
     <com.example.a8.newcontacts.view.QuickBar
         android:id="@+id/quickBar"

@@ -21,6 +21,8 @@ import android.widget.ImageView;
 
 import com.example.a8.newcontacts.R;
 
+import java.security.SecureRandom;
+
 public class CircleImageView extends ImageView {
 
     private static final ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;
@@ -118,7 +120,7 @@ public class CircleImageView extends ImageView {
 
         Paint paint = new Paint();
         paint.setFlags(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(Color.rgb((int) (Math.random() * 256), (int) (Math.random() * 256), (int) (Math.random() * 192+64)));
+        paint.setColor(getRandomColor());
         paint.setDither(true);
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
@@ -130,6 +132,13 @@ public class CircleImageView extends ImageView {
             canvas.drawCircle(getWidth() / 2, getHeight() / 2, mBorderRadius,
                     mBorderPaint);
         }
+    }
+
+    private int getRandomColor() {
+        SecureRandom rgen = new SecureRandom();
+        return Color.HSVToColor(200, new float[]{
+                rgen.nextInt(350), 1, 1
+        });
     }
 
     @Override

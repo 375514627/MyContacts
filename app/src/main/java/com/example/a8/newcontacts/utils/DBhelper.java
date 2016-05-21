@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Created by A8 on 2016/4/24.
  */
-public class DBhelper {
+public class DBHelper {
 
     private Context context;
 
@@ -32,7 +32,7 @@ public class DBhelper {
         this.context = context;
     }
 
-    public DBhelper(Context context) {
+    public DBHelper(Context context) {
         this.context = context;
     }
 
@@ -40,7 +40,7 @@ public class DBhelper {
     private Uri rawContactUri = ContactsContract.RawContacts.CONTENT_URI;
 
     //删除功能 传入联系人的ID 并进行条件查找后该列所有数据
-    public void delete(int id) {
+    public void delete(long id) {
         int delete = context.getContentResolver().delete(rawContactUri, "_id = ?", new String[]{id + ""});
         if (delete > 0) {
             Toast.makeText(context, "删除成功", Toast.LENGTH_SHORT).show();
@@ -49,9 +49,7 @@ public class DBhelper {
         }
     }
 
-    //增加功能 传入一个封装好的
-    public long insert(MyContacts contacts) {
-
+    public int insertID(MyContacts contacts) {
         ContentResolver contentResolver = context.getContentResolver();
         ContentValues values = new ContentValues();
         String firstCase = contacts.getName().charAt(0) + "";
@@ -60,6 +58,15 @@ public class DBhelper {
         Uri uri = contentResolver.insert(rawContactUri, values);
 
         long id = ContentUris.parseId(uri);
+        insert(contacts, id);
+        return (int) id;
+    }
+
+    //增加功能 传入一个封装好的
+    public long insert(MyContacts contacts, long id) {
+
+        ContentResolver contentResolver = context.getContentResolver();
+        ContentValues values = new ContentValues();
 
         //得到对象的所有相关数据 一个一个加入到数据的表中
         String name = contacts.getName();
@@ -120,7 +127,7 @@ public class DBhelper {
     }
 
     //变更是否为收藏联系人
-    public int starred(int id, boolean how) {
+    public int starred(long id, boolean how) {
         ContentValues values = new ContentValues();
         values.put("starred", how ? "1" : "0");
         int update = context.getContentResolver().update(ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, id), values, null, null);
@@ -130,7 +137,7 @@ public class DBhelper {
     public static List<MyContacts> loadContact(ContentResolver resolver) {
         List<MyContacts> list = new ArrayList<>();
         Cursor data = resolver.query(ContactsContract.RawContacts.CONTENT_URI,
-                new String[]{"contact_id", "display_name", "phonebook_label","starred"}, "deleted=?", new String[]{"0"}, "phonebook_label");
+                new String[]{"contact_id", "display_name", "phonebook_label", "starred"}, "deleted=?", new String[]{"0"}, "phonebook_label");
         while (data.moveToNext()) {
             int id = data.getInt(0);
             String name = data.getString(1);
@@ -141,7 +148,7 @@ public class DBhelper {
             String phone = null;
             String email = null;
             String address = null;
-            String business =null;
+            String business = null;
             Cursor cursor = resolver.query(dataUri, new String[]{"mimetype", "data1"}, null, null, null);
             while (cursor.moveToNext()) {
                 String mimetype = cursor.getString(0);
@@ -159,7 +166,7 @@ public class DBhelper {
                         email = temp;
                         break;
                     case "vnd.android.cursor.item/organization":
-                        business=temp;
+                        business = temp;
                         break;
                     case "vnd.android.cursor.item/postal-address_v2":
                         address = temp;
@@ -167,7 +174,7 @@ public class DBhelper {
                 }
             }
             cursor.close();
-            list.add(new MyContacts(starred,name,email,phone,contactPhoto,sort_key,address,business,id));
+            list.add(new MyContacts(starred, name, email, phone, contactPhoto, sort_key, address, business, id));
         }
         data.close();
 

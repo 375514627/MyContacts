@@ -91,7 +91,7 @@ public class MyContacts implements Serializable {
     public MyContacts() {
     }
 
-    public MyContacts(int starred,String name, String email, String phoneNum, Bitmap bitmap, String sort_key, String address, String buiness, int ID) {
+    public MyContacts(int starred, String name, String email, String phoneNum, Bitmap bitmap, String sort_key, String address, String buiness, int ID) {
         this.name = name;
         this.email = email;
         this.phoneNum = phoneNum;

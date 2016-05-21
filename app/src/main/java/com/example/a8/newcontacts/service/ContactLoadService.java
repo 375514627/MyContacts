@@ -8,7 +8,7 @@ import android.os.IBinder;
 import android.os.Message;
 
 import com.example.a8.newcontacts.bean.MyContacts;
-import com.example.a8.newcontacts.utils.DBhelper;
+import com.example.a8.newcontacts.utils.DBHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +62,7 @@ public class ContactLoadService extends Service {
             @Override
             public void run() {
 
-                list = DBhelper.loadContact(getContentResolver());
+                list = DBHelper.loadContact(getContentResolver());
                 h.sendEmptyMessage(1);
 
             }

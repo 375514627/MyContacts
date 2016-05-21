@@ -1,5 +1,6 @@
 package com.example.a8.newcontacts.fragment;
 
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.ContentResolver;
@@ -18,10 +19,8 @@ import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,7 +34,7 @@ import com.example.a8.newcontacts.adapter.FavrAdapter;
 import com.example.a8.newcontacts.bean.FavrContacts;
 import com.example.a8.newcontacts.bean.MyContacts;
 import com.example.a8.newcontacts.service.ContactLoadService;
-import com.example.a8.newcontacts.utils.DBhelper;
+import com.example.a8.newcontacts.utils.DBHelper;
 import com.example.a8.newcontacts.view.QuickBar;
 
 import java.util.List;
@@ -67,7 +66,7 @@ public class ShowContacts_Fragment extends Fragment {
 
     private ListView lv_contact;
     private static ContactAdapter mAdapter;
-    private DBhelper dbHelper;
+    private DBHelper dbHelper;
 
     public static ContactAdapter getContactAdapter() {
         return mAdapter;
@@ -99,7 +98,6 @@ public class ShowContacts_Fragment extends Fragment {
                     public void onServiceConnected(ComponentName name, IBinder service) {
                         ContactLoadService.MyBinder binder = (ContactLoadService.MyBinder) service;
                         loadService = binder.getService();
-                        System.out.println("----绑定成功-");
                         binder.setContactLoadCallBack(new ContactLoadService.ContactLoadCallBack() {
 
                             @Override
@@ -113,7 +111,7 @@ public class ShowContacts_Fragment extends Fragment {
 
                     @Override
                     public void onServiceDisconnected(ComponentName name) {
-                        System.out.println("----断开连接-");
+
                     }
                 }, Context.BIND_AUTO_CREATE);
     }
@@ -209,35 +207,52 @@ public class ShowContacts_Fragment extends Fragment {
             }
         });
 
-        qucikBar.setOnTouchLetterChangeListenner(new QuickBar.OnTouchLetterChangeListenner() {
+        lv_contact.setOnScrollChangeListener(new View.OnScrollChangeListener() {
 
             @Override
-            public void onTouchLetterChange(MotionEvent event, String s) {
-                float_letter.setText(s);
-                List<MyContacts> list = mAdapter.getList();
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        float_letter.setVisibility(View.VISIBLE);
-                    case MotionEvent.ACTION_MOVE:
-                        float_letter.setVisibility(View.VISIBLE);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        AlphaAnimation animation2 = new AlphaAnimation(0.6f, 0.0f);
-                        animation2.setDuration(300);
-                        float_letter.startAnimation(animation2);
-                        float_letter.setVisibility(View.GONE);
-                        break;
-                }
-                int position = 0;//这个array就是传给自定义Adapter的
-                for (MyContacts c : list) {
-                    if (c.getSort_key().equals(s)) {
-                        position = list.indexOf(c);
-                        break;
-                    }
-                }
-                lv_contact.setSelection(position);//调用ListView的setSelection()方法实现
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
             }
         });
+
+        qucikBar.setOnTouchLetterChangeListener(new QuickBar.OnTouchLetterChangeListener() {
+
+            @Override
+            public void onPressLetter(String letter) {
+                float_letter.setText(letter);
+                ObjectAnimator animator = ObjectAnimator.ofFloat(float_letter, "alpha", 0, 1);
+                animator.setDuration(500);
+                animator.start();
+                movePos(letter);
+            }
+
+            @Override
+            public void onMoveLetterChange(String letter) {
+                float_letter.setText(letter);
+                movePos(letter);
+            }
+
+            @Override
+            public void onDetachedLetter() {
+                ObjectAnimator animator = ObjectAnimator.ofFloat(float_letter, "alpha", float_letter.getAlpha(), 0);
+                animator.setDuration(500);
+                animator.start();
+            }
+        });
+    }
+
+    private void movePos(String letter) {
+        int position = 0;
+        List<MyContacts> list = mAdapter.getList();
+        for (MyContacts c : list) {
+            if (c.getSort_key().equals(letter)) {
+                position = list.indexOf(c);
+                break;
+            } else if (list.get(list.size() - 1).equals(c)) {
+                return;
+            }
+        }
+        lv_contact.setSelection(position);
     }
 
     private void starred(int id, boolean how) {
@@ -262,7 +277,7 @@ public class ShowContacts_Fragment extends Fragment {
     }
 
     private void delete(final int position) {
-        dbHelper = new DBhelper(getActivity());
+        dbHelper = new DBHelper(getActivity());
         new AlertDialog.Builder(getActivity())
                 .setMessage("删除联系人")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -283,12 +298,4 @@ public class ShowContacts_Fragment extends Fragment {
         loadService.loadContacts();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == ContactActivity.DELETE_RESULT) {
-            int id = data.getIntExtra("delete", 0);
-            mAdapter.remove(id);
-        }
-    }
 }

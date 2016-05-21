@@ -21,7 +21,7 @@ import android.view.View;
 public class QuickBar extends View {
 
     private Paint mPaint = new Paint();
-    private OnTouchLetterChangeListenner listenner;
+    private OnTouchLetterChangeListener listenner;
     // 是否画出背景
     private boolean showBg = false;
     // 选中的项
@@ -30,6 +30,7 @@ public class QuickBar extends View {
     public static String[] letters = {"#", "A", "B", "C", "D", "E", "F", "G",
             "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
             "U", "V", "W", "X", "Y", "Z"};
+
     // 构造方法
     public QuickBar(Context context) {
         super(context);
@@ -57,7 +58,7 @@ public class QuickBar extends View {
             // 设置字体格式
             mPaint.setTypeface(Typeface.DEFAULT_BOLD);
             mPaint.setAntiAlias(true);
-            mPaint.setTextSize(25f);
+            mPaint.setTextSize(width / 2);
             // 如果这一项被选中，则换一种颜色画
             if (i == choose) {
                 mPaint.setColor(Color.parseColor("#F88701"));
@@ -86,19 +87,18 @@ public class QuickBar extends View {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 showBg = true;
-                if (oldChoose != index && listenner != null && index > 0
+                if (oldChoose != index && listenner != null && index >= 0
                         && index < letters.length) {
                     choose = index;
-                    listenner.onTouchLetterChange(event, letters[index]);
+                    listenner.onPressLetter(letters[index]);
                     invalidate();
                 }
                 break;
-
             case MotionEvent.ACTION_MOVE:
-                if (oldChoose != index && listenner != null && index > 0
+                if (oldChoose != index && listenner != null && index >= 0
                         && index < letters.length) {
                     choose = index;
-                    listenner.onTouchLetterChange(event, letters[index]);
+                    listenner.onMoveLetterChange(letters[index]);
                     invalidate();
                 }
                 break;
@@ -106,22 +106,27 @@ public class QuickBar extends View {
             default:
                 showBg = false;
                 choose = -1;
-                if (listenner != null && index > 0 && index < letters.length)
-                    listenner.onTouchLetterChange(event, letters[index]);
+                if (listenner != null) {
+                    listenner.onDetachedLetter();
+                }
                 invalidate();
                 break;
         }
         return true;
     }
 
-    public void setOnTouchLetterChangeListenner(
-            OnTouchLetterChangeListenner listenner) {
-        this.listenner = listenner;
+    public void setOnTouchLetterChangeListener(
+            OnTouchLetterChangeListener listener) {
+        this.listenner = listener;
     }
 
-    public interface OnTouchLetterChangeListenner {
+    public interface OnTouchLetterChangeListener {
 
-        void onTouchLetterChange(MotionEvent event, String s);
+        void onPressLetter(String letter);
+
+        void onMoveLetterChange(String letter);
+
+        void onDetachedLetter();
     }
 
 }
