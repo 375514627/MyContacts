@@ -62,6 +62,63 @@ public class DBHelper {
         return (int) id;
     }
 
+    public int update(MyContacts contacts, long id) {
+        ContentResolver contentResolver = context.getContentResolver();
+        ContentValues values = new ContentValues();
+
+        int update = 0;
+
+        String name = contacts.getName();
+        String address = contacts.getAddress();
+        String business = contacts.getBusiness();
+        String email = contacts.getEmail();
+        String phoneNum = contacts.getPhoneNum();
+        byte[] b = null;
+        Bitmap bitmap = contacts.getBitmap();
+        if (bitmap != null) {
+            try {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                b = baos.toByteArray();
+                baos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        values.put("mimetype", "vnd.android.cursor.item/name");
+        values.put("data1", name);
+        update += contentResolver.update(dataUri, values, "_id=?", new String[]{id + ""});
+
+        values.clear();
+        values.put("mimetype", "vnd.android.cursor.item/photo");
+        values.put("data1", b);
+        update += contentResolver.update(dataUri, values, "_id=?", new String[]{id + ""});
+
+        values.clear();
+        values.put("mimetype", "vnd.android.cursor.item/postal-address_v2");
+        values.put("data1", address);
+        update += contentResolver.update(dataUri, values, "_id=?", new String[]{id + ""});
+
+        values.clear();
+        values.put("mimetype", "vnd.android.cursor.item/organization");
+        values.put("data1", business);
+        update += contentResolver.update(dataUri, values, "_id=?", new String[]{id + ""});
+
+        values.clear();
+        values.put("mimetype", "vnd.android.cursor.item/email_v2");
+        values.put("data1", email);
+        update += contentResolver.update(dataUri, values, "_id=?", new String[]{id + ""});
+
+        values.clear();
+        values.put("mimetype", "vnd.android.cursor.item/phone_v2");
+        values.put("data1", phoneNum);
+        update += contentResolver.update(dataUri, values, "_id=?", new String[]{id + ""});
+
+        return update;
+
+    }
+
     //增加功能 传入一个封装好的
     public long insert(MyContacts contacts, long id) {
 
@@ -70,7 +127,7 @@ public class DBHelper {
 
         //得到对象的所有相关数据 一个一个加入到数据的表中
         String name = contacts.getName();
-        String adress = contacts.getAddress();
+        String address = contacts.getAddress();
         String business = contacts.getBusiness();
         String email = contacts.getEmail();
         String phoneNum = contacts.getPhoneNum();
@@ -101,7 +158,7 @@ public class DBHelper {
 
         values.clear();
         values.put("mimetype", "vnd.android.cursor.item/postal-address_v2");
-        values.put("data1", adress);
+        values.put("data1", address);
         values.put("raw_contact_id", id);
         contentResolver.insert(dataUri, values);
 
@@ -134,6 +191,7 @@ public class DBHelper {
         return update;
     }
 
+    //加载联系人 返回一个联系人的集合
     public static List<MyContacts> loadContact(ContentResolver resolver) {
         List<MyContacts> list = new ArrayList<>();
         Cursor data = resolver.query(ContactsContract.RawContacts.CONTENT_URI,
