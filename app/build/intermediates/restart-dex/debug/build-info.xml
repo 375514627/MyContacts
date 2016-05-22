@@ -1,45 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <instant-run
-    abi="x86"
+    abi="x86_64,x86"
     api-level="22"
-    density="420dpi"
+    density="mdpi"
     format="7"
-    timestamp="277586919577598" >
+    timestamp="361846662004814" >
 
     <task
         name="javac"
-        duration="0" />
+        duration="482" />
     <task
         name="instant-run-dex"
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="0" />
+        duration="22" />
     <task
         name="verifier"
-        duration="0" />
+        duration="4" />
 
     <artifact
-        location="E:\WorkSpace\AndroidStudioProjects\NewContacts\app\build\intermediates\res\resources-debug.ap_"
-        type="RESOURCES" />
+        location="E:\WorkSpace\AndroidStudioProjects\NewContacts\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_2\classes.dex"
+        type="DEX" />
 
-    <build timestamp="267257786641897" >
+    <build timestamp="361144352616235" >
         <artifact
             location="E:\WorkSpace\AndroidStudioProjects\NewContacts\app\build\outputs\apk\app-debug.apk"
             type="MAIN" />
     </build>
-    <build timestamp="269016123074863" >
-        <artifact
-            location="E:\WorkSpace\AndroidStudioProjects\NewContacts\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_9\classes.dex"
-            type="DEX" />
+    <build timestamp="361328448205800" >
         <artifact
             location="E:\WorkSpace\AndroidStudioProjects\NewContacts\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_1\classes.dex"
             type="DEX" />
     </build>
-    <build timestamp="277586919577598" >
+    <build timestamp="361791904742293" >
         <artifact
-            location="E:\WorkSpace\AndroidStudioProjects\NewContacts\app\build\intermediates\res\resources-debug.ap_"
-            type="RESOURCES" />
+            location="E:\WorkSpace\AndroidStudioProjects\NewContacts\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_7\classes.dex"
+            type="DEX" />
+    </build>
+    <build timestamp="361846662004814" >
+        <artifact
+            location="E:\WorkSpace\AndroidStudioProjects\NewContacts\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_2\classes.dex"
+            type="DEX" />
     </build>
 
 </instant-run>

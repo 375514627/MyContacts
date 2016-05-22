@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.a8.newcontacts.bean.MyContacts;
 import com.example.a8.newcontacts.fragment.ShowContacts_Fragment;
+import com.example.a8.newcontacts.utils.Chinese2Pinyin;
 import com.example.a8.newcontacts.utils.DBHelper;
 import com.example.a8.newcontacts.utils.ImageLoad;
 
@@ -64,15 +65,15 @@ public class AddContactActivity extends AppCompatActivity implements View.OnClic
     private boolean isNew = true;
 
     private void setView() {
-        //设置为是编辑联系人的状态
-        isNew = false;
-        //如果是编辑联系人而不是新增
         Intent intent = getIntent();
-        //更新标题
-        getSupportActionBar().setTitle("编辑联系人");
         MyContacts contact = (MyContacts) intent.getSerializableExtra("contact");
         //更新编辑框的内容 为该联系人的相应信息
         if (contact != null) {
+            //如果是编辑联系人而不是新增
+            //更新标题
+            getSupportActionBar().setTitle("编辑联系人");
+            //设置为是编辑联系人的状态
+            isNew = false;
             et_name.setText(contact.getName());
             et_phone.setText(contact.getPhoneNum());
             et_email.setText(contact.getEmail());
@@ -150,6 +151,9 @@ public class AddContactActivity extends AppCompatActivity implements View.OnClic
         DBHelper helper = new DBHelper(this);
         int id = helper.insertID(contact);
         contact.setID(id);
+        String firstCase = contact.getName().charAt(0) + "";
+        String firstPinyin = Chinese2Pinyin.getPingYing(firstCase);
+        contact.setSort_key(firstPinyin);
         //如果id大于0则表示新增成功
         Toast.makeText(AddContactActivity.this, id > 0 ? "增加成功" : "增加失败", Toast.LENGTH_SHORT).show();
         if (id > 0) {

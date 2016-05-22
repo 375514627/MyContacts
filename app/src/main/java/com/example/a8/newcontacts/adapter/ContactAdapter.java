@@ -13,6 +13,8 @@ import com.example.a8.newcontacts.bean.MyContacts;
 import com.example.a8.newcontacts.view.CircleImageView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -85,7 +87,22 @@ public class ContactAdapter extends BaseAdapter {
 
     public void add(MyContacts contacts) {
         list.add(contacts);
+        sort();
         notifyDataSetChanged();
+    }
+
+    public void sort() {
+        Collections.sort(list, new Comparator<MyContacts>() {
+
+            @Override
+            public int compare(MyContacts lhs, MyContacts rhs) {
+                if (lhs.getSort_key().equals(rhs.getSort_key())) {
+                    return lhs.getName().compareTo(rhs.getName());
+                }
+                return lhs.getSort_key().compareTo(rhs.getSort_key());
+            }
+
+        });
     }
 
     public void remove(MyContacts contacts) {

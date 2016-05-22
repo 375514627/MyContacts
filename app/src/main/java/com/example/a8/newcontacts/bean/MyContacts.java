@@ -3,8 +3,9 @@ package com.example.a8.newcontacts.bean;
 import android.graphics.Bitmap;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
-public class MyContacts implements Serializable {
+public class MyContacts implements Serializable, Comparator<MyContacts> {
 
     private String name;
     private String email;
@@ -117,4 +118,13 @@ public class MyContacts implements Serializable {
                 ", ID=" + ID +
                 '}';
     }
+
+    @Override
+    public int compare(MyContacts lhs, MyContacts rhs) {
+        if (lhs.getSort_key().equals(rhs.getSort_key())) {
+            return lhs.getName().compareTo(rhs.getName());
+        }
+        return lhs.getSort_key().compareTo(rhs.getSort_key());
+    }
+
 }

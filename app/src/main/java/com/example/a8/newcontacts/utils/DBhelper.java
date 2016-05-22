@@ -49,16 +49,16 @@ public class DBHelper {
         }
     }
 
-    public int insertID(MyContacts contacts) {
+    public int insertID(MyContacts contact) {
         ContentResolver contentResolver = context.getContentResolver();
         ContentValues values = new ContentValues();
-        String firstCase = contacts.getName().charAt(0) + "";
+        String firstCase = contact.getName().charAt(0) + "";
         String firstPinyin = Chinese2Pinyin.getPingYing(firstCase);
         values.put("phonebook_label", firstPinyin);
         Uri uri = contentResolver.insert(rawContactUri, values);
 
         long id = ContentUris.parseId(uri);
-        insert(contacts, id);
+        insert(contact, id);
         return (int) id;
     }
 
