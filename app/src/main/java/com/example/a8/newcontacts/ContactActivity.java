@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -46,15 +47,19 @@ public class ContactActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //初始化contact对象
         Intent intent = getIntent();
         contact = (MyContacts) intent.getSerializableExtra("contact");
         setContentView(R.layout.activity_contact);
 
+        //初始化toolbar
         initToolbar();
 
-
+        //初始化DBHelper工具
         DBHelper = new DBHelper(this);
 
+        //相应初始化方法
         initViews();
         setView();
 
@@ -74,6 +79,7 @@ public class ContactActivity extends AppCompatActivity implements View.OnClickLi
         collapsing_toolbar_layout.setExpandedTitleColor(Color.WHITE);
         setSupportActionBar(toolbar);
 
+        //设置toolbar菜单的消极按钮(回退按钮)的监听事件
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -87,16 +93,16 @@ public class ContactActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
-                    case android.R.id.home:
-                        finish();
-                        break;
                     case R.id.menu_create:
+                        //change()方法
                         change();
                         break;
                     case R.id.menu_delete:
+                        //delete()方法
                         delete();
                         break;
                     case R.id.menu_starred:
+                        //starred()方法 收藏 将此按钮的item传进方法, 用于更改图标是空心还是实心
                         starred(item);
                         break;
                 }
@@ -107,6 +113,7 @@ public class ContactActivity extends AppCompatActivity implements View.OnClickLi
 
     private void initViews() {
 
+        //找到所有用到的控件id
         iv_directions = findViewById(R.id.iv_directions);
         iv_sendMsg = findViewById(R.id.iv_sendMsg);
 
@@ -120,16 +127,19 @@ public class ContactActivity extends AppCompatActivity implements View.OnClickLi
         views = new View[]{findViewById(R.id.rl_business), findViewById(R.id.rl_email)
                 , findViewById(R.id.rl_place), findViewById(R.id.rl_phone), findViewById(R.id.iv_sendMsg)};
 
+        //设置监听器
         setListener();
 
 
     }
 
     private void setListener() {
+        //循环遍历所有可点击的布局 设置上点击监听事件
         for (View v : views) {
             v.setOnClickListener(this);
         }
 
+        //设置长点击监听事件
         for (View v : views) {
             v.setOnLongClickListener(this);
         }
@@ -141,6 +151,7 @@ public class ContactActivity extends AppCompatActivity implements View.OnClickLi
 
     private void setView() {
 
+        //获取对象的所有属性
         name = contact.getName();
         id = contact.getID();
         email = contact.getEmail();
@@ -149,38 +160,46 @@ public class ContactActivity extends AppCompatActivity implements View.OnClickLi
         business = contact.getBusiness();
         phoneNum = contact.getPhoneNum();
 
+        //设置标题为联系人的名字
         getSupportActionBar().setTitle(name + "");
         String[] strs = new String[]{business, email, address, phoneNum};
 
+        //判断该联系人内的信息是否为空, 如果是则把对应的控件设置为GONE(隐藏控件并且不占据空间)
         for (int i = 0; i < strs.length; i++) {
             if (!TextUtils.isEmpty(strs[i])) {
+                //如果有内容,则设置相应的控件的文本内容
                 textViews[i].setText(strs[i]);
             } else {
                 views[i].setVisibility(View.GONE);
             }
         }
 
+        //如果地址为空, 则将定位图标隐藏.
         if (TextUtils.isEmpty(address)) {
             iv_directions.setVisibility(View.GONE);
         }
 
     }
 
-
+    //创建菜单
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_contact, menu);
+
+        //找到收藏按钮的menu item id
         MenuItem item = menu.findItem(R.id.menu_starred);
         Intent intent = getIntent();
+        //获取传入的意图里contact对象 判断是否为收藏的
         contact = (MyContacts) intent.getSerializableExtra("contact");
         if (contact.getStarred() > 0) {
             menu.findItem(R.id.menu_starred).setChecked(true);
+            //如果是,则图标换成实心的
             item.setIcon(R.mipmap.ic_star_24dp);
         }
         return true;
     }
 
-
+    //点击编辑后,将contact传到另一个activity 启动意图 结束当前界面
     private void change() {
         Intent intent = new Intent(this, AddContactActivity.class);
         intent.putExtra("contact", contact);
@@ -188,33 +207,42 @@ public class ContactActivity extends AppCompatActivity implements View.OnClickLi
         finish();
     }
 
+    //返回结果的常量.
     public static final int DELETE_RESULT = 0x123;
 
+    //删除联系人的方法. 跳出一个警告对话框
     private void delete() {
-        new android.app.AlertDialog.Builder(this)
+        new AlertDialog.Builder(this)
                 .setMessage("删除联系人")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        //删除该联系人
                         DBHelper.delete(id);
+                        //更新所有联系人的列表
                         ShowContacts_Fragment.getContactAdapter().remove(id);
+                        //回到上次的界面
                         finish();
                     }
                 })
                 .setNegativeButton("取消", null).show();
     }
 
+    //收藏执行的操作
     private void starred(MenuItem item) {
         boolean b = !item.isChecked();
-        System.out.println("-----" + b);
+        //把选择状态取反 并设置图标
         item.setChecked(b);
         if (b) {
             item.setIcon(R.mipmap.ic_star_24dp);
         } else {
             item.setIcon(R.mipmap.ic_star_outline_24dp);
         }
+        //调用DBHelper的收藏方法
         DBHelper.starred(id, b);
+
+        //刷新两个碎片里的适配器, 实时更新收藏联系人和所有联系人的列表
         FavrContacts_Fragment.refreshAdapter();
         ShowContacts_Fragment.refreshAdapter();
     }
@@ -224,22 +252,27 @@ public class ContactActivity extends AppCompatActivity implements View.OnClickLi
         Intent intent = null;
         switch (v.getId()) {
             case R.id.rl_phone:
+                //打电话
                 intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + tv_phone.getText().toString()));
                 break;
             case R.id.iv_directions:
                 //百度地图接口
                 break;
             case R.id.iv_sendMsg:
+                //跳到发短信
                 intent = new Intent(android.content.Intent.ACTION_SENDTO, Uri.parse("smsto://" + tv_phone.getText().toString()));
                 break;
         }
         if (intent != null) {
+            //如果不为空 最后执行意图
             startActivity(intent);
         }
     }
 
     @Override
     public boolean onLongClick(View v) {
+
+        //以下为死代码 获取系统的粘贴板管理者 复制长按选中的内容
         if (mClipboard == null) {
             mClipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         }
